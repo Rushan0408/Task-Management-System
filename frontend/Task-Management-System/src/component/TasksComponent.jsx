@@ -72,7 +72,11 @@ const TasksComponent = ({ userId }) => {
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="m-0">Task List</h2>
-                <Link to="/add-task" className="btn btn-primary btn-sm">
+                <Link 
+                  to="/add-task" 
+                  state={{ userId: userId }} 
+                  className="btn btn-primary btn-sm"
+                >
                   <FaPlus className="me-2" /> Add Task
                 </Link>
               </div>

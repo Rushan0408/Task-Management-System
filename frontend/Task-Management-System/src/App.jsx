@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const activeUserId = getLoggedInUserId();
+  console.log("Active User ID from App.jsx:", activeUserId);
 
   function AuthenticatedRoute({ children }) {
     const isAuthenticated = isUserLoggedIn();
@@ -21,7 +22,7 @@ function App() {
     if (isAuthenticated) {
       return children;
     }
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
 
   return (

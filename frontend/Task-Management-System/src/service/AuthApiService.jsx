@@ -13,7 +13,7 @@ export const loginApi = (username, password) =>
   authApiClient.post('/login', loginCredentials(username, password));
 
 export const saveLoggedUser = (userId, username, role) => {
-  sessionStorage.setItem('activeUserId', userId);
+  sessionStorage.setItem('activeUserId', userId.toString());  // Ensure it's stored as string
   sessionStorage.setItem('authenticatedUser', username);
   sessionStorage.setItem('role', role);
 };
@@ -23,7 +23,11 @@ export const getBasicAuth = () => localStorage.getItem('auth');
 
 export const isUserLoggedIn = () => !!sessionStorage.getItem('authenticatedUser'); // Leverage double negation for concise check
 
-export const getLoggedInUserId = () => sessionStorage.getItem('activeUserId');
+export const getLoggedInUserId = () => {
+  const userId = sessionStorage.getItem('activeUserId');
+  return userId ? parseInt(userId) : null;  // Convert to number when retrieving
+};
+
 export const getLoggedInUser = () => sessionStorage.getItem('authenticatedUser');
 
 export const logout = () => {

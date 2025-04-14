@@ -1,17 +1,30 @@
 import { useEffect, useState } from "react";
 import { createTask, retrieveTaskById, updateTask } from "../service/TaskApiService";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FaTasks } from "react-icons/fa";
 
 const AddTaskComponent = ({ userId }) => {
     const [task, setTask] = useState("");
     const [completed, setCompleted] = useState(false);
-    const taskCreatedAt = new Date().toISOString(); // Convert to ISO string
+    const taskCreatedAt = new Date().toISOString(); 
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const [errors, setErrors] = useState({ task: "" });
   
+    // Get userId from props or location state
+    const effectiveUserId = userId || location.state?.userId;
+    console.log("Effective User ID:", effectiveUserId);
+
+    // Redirect if no userId is available
+    useEffect(() => {
+      if (!effectiveUserId) {
+        console.log("No userId available, redirecting to login");
+        navigate('/login');
+      }
+    }, [effectiveUserId, navigate]);
+
     useEffect(() => {
       if (id) {
         retrieveTaskById(id)
@@ -26,19 +39,24 @@ const AddTaskComponent = ({ userId }) => {
   
     function saveTask(event) {
       event.preventDefault();
+      console.log("User ID in AddTaskComponent:", effectiveUserId);
       if (validateForm()) {
         const taskObj = {
           task,
           completed,
           taskCreatedAt,
-          updatedAt: new Date().toISOString(), // Add updatedAt field
+          updatedAt: new Date().toISOString(),
+          user: {
+            id: parseInt(effectiveUserId)  
+          }
         };
+        console.log("Task object being sent:", taskObj);
         if (id) {
           updateTask(taskObj, id)
             .then(navigate("/tasks"))
             .catch((error) => console.error(error));
         } else {
-          createTask(taskObj, userId)
+          createTask(taskObj, effectiveUserId)
             .then(navigate("/tasks"))
             .catch((error) => console.error(error));
         }

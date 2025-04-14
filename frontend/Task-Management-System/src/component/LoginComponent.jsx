@@ -19,7 +19,7 @@ const LoginComponent = () => {
     if (validateForm()) {
       await loginApi(username, password)
         .then((response) => {
-          console.log(response.data);
+          console.log("Login response:", response.data);
           const basicAuth = "Basic " + btoa(username + ":" + password);
           const role = response.data.role;
           storeBasicAuth(basicAuth);
