@@ -13,8 +13,8 @@ const AddTaskComponent = ({ userId }) => {
     const location = useLocation();
     const [errors, setErrors] = useState({ task: "" });
   
-    // Get userId from props or location state
-    const effectiveUserId = userId || location.state?.userId;
+    // Get userId from props or location state or localStorage
+    const effectiveUserId = userId || location.state?.userId || JSON.parse(localStorage.getItem('user'))?.id;
     console.log("Effective User ID:", effectiveUserId);
 
     // Redirect if no userId is available
